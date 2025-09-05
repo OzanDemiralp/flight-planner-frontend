@@ -1,20 +1,21 @@
 import {
   AppBar,
   Box,
-  FormControl,
-  InputLabel,
   Paper,
-  Select,
   Toolbar,
   Typography,
+  Grid,
+  Fade,
 } from '@mui/material';
 import { useState } from 'react';
 import FlightForm from '../components/FlightForm';
 import NumberFields from '../components/NumberFields';
 import DateRangeSelector from '../components/DateRangeSelector';
 import SearchButton from '../components/SearchButton';
+import ResultPanel from '../components/ResultPanel';
 
 function MainPage() {
+  const [open, setOpen] = useState(false);
   const trips = Array.from({ length: 12 }).map((_, i) => ({
     departureDate: '2025-09-10',
     departureTime: '10:00',
@@ -22,6 +23,7 @@ function MainPage() {
     returnTime: '18:00',
     totalPrice: 450 + i * 10,
   }));
+
   return (
     <>
       <Box>
@@ -39,39 +41,69 @@ function MainPage() {
         </AppBar>
       </Box>
 
-      <Box
+      {/* Grid ile sol ve sağ alan */}
+      <Grid
+        container
+        spacing={2}
         sx={{
+          minHeight: 'calc(100vh - 64px)',
+          px: 2,
           mt: { xs: 2, sm: 3, md: 6, lg: 8 },
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'flex-start',
-          minHeight: 'calc(100vh - 64px)',
-          //backgroundColor: '#ffffffff',
-          //border: '3px solid ',
+          alignItems: 'center',
         }}
       >
-        <Paper
-          elevation={3}
-          sx={{
-            mt: { xs: 0.5, sm: 1.5, md: 3, lg: 4 },
-            padding: { xs: 2, sm: 3, md: 4 },
-            borderRadius: 4,
-            width: { xs: '90%', sm: '60%', md: '50%', lg: '40%' },
-            minWidth: 250,
-            height: 'auto',
-            maxHeight: { xs: '70vh', sm: '60vh', md: '50vh' },
-            minHeight: 200,
-            backgroundColor: 'white',
-            boxShadow: '0 8px 24px #2196f3',
-            opacity: 0.9, // 0.0 - 1.0 arası
-          }}
+        {/* Sol Paper */}
+        <Grid
+          item
+          xs={12} // mobilde tam genişlik
+          md={6} // desktopta yarı yarıya
+          display='flex'
+          justifyContent='center'
+          alignItems='center'
+          sx={{ boxSizing: 'border-box' }}
         >
-          <FlightForm />
-          <DateRangeSelector />
-          <NumberFields />
-          <SearchButton trips={trips} />
-        </Paper>
-      </Box>
+          <Paper
+            elevation={3}
+            sx={{
+              padding: { xs: 2, sm: 3, md: 4 },
+              borderRadius: 4,
+              width: '100%', // Grid item'ı tamamen kaplasın
+              height: 'auto',
+              maxHeight: { xs: '70vh', sm: '60vh', md: '50vh' },
+              minHeight: 200,
+              backgroundColor: 'white',
+              boxShadow: '0 8px 24px #2196f3',
+              opacity: 0.9,
+            }}
+          >
+            <FlightForm />
+            <DateRangeSelector />
+            <NumberFields />
+            <SearchButton
+              onClick={() => {
+                setOpen(true);
+                console.log('Button clicked:', open);
+              }}
+            />
+          </Paper>
+        </Grid>
+
+        {/* Sağ Box */}
+        <Grid
+          item
+          xs={12}
+          md={6} // desktopta yarı yarıya
+          sx={{ boxSizing: 'border-box', mt: '2' }}
+        >
+          <ResultPanel
+            open={open}
+            trips={trips}
+            onClose={() => setOpen(false)}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 }
