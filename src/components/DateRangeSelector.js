@@ -3,18 +3,17 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState } from 'react';
 
-export default function DateRangeSelector({ onChange }) {
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
-
+export default function DateRangeSelector({
+  onChange,
+  setStartDate,
+  setEndDate,
+}) {
   const handleStartChange = (newValue) => {
-    setStart(newValue);
-    if (onChange) onChange([newValue, end]);
+    setStartDate(newValue);
   };
 
   const handleEndChange = (newValue) => {
-    setEnd(newValue);
-    if (onChange) onChange([start, newValue]);
+    setEndDate(newValue);
   };
 
   return (
@@ -31,7 +30,6 @@ export default function DateRangeSelector({ onChange }) {
           <Grid item xs={6}>
             <DatePicker
               label='Start Date'
-              value={start}
               onChange={handleStartChange}
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
@@ -39,7 +37,6 @@ export default function DateRangeSelector({ onChange }) {
           <Grid item xs={6}>
             <DatePicker
               label='End Date'
-              value={end}
               onChange={handleEndChange}
               renderInput={(params) => <TextField {...params} fullWidth />}
             />

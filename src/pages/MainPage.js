@@ -1,28 +1,39 @@
-import {
-  AppBar,
-  Box,
-  Paper,
-  Toolbar,
-  Typography,
-  Grid,
-  Fade,
-} from '@mui/material';
+import { AppBar, Box, Paper, Toolbar, Typography, Grid } from '@mui/material';
 import { useState } from 'react';
 import FlightForm from '../components/FlightForm';
 import NumberFields from '../components/NumberFields';
 import DateRangeSelector from '../components/DateRangeSelector';
 import SearchButton from '../components/SearchButton';
 import ResultPanel from '../components/ResultPanel';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchFlightData } from '../features/flightSlice';
 function MainPage() {
+  const dispatch = useDispatch();
+  const { result, status, error } = useSelector((state) => state.flight);
   const [open, setOpen] = useState(false);
-  const trips = Array.from({ length: 240 }).map((_, i) => ({
-    departureDate: '2025-09-10',
-    departureTime: '10:00',
-    returnDate: '2025-09-20',
-    returnTime: '18:00',
-    totalPrice: 450 + i * 10,
-  }));
+  const trips = result?.flightData?.trips || [];
+  console.log('result:', result);
+  console.log('trips:', trips);
+
+  const [departureFrom, setDepartureFrom] = useState('');
+  const [departureTo, setDepartureTo] = useState('');
+  const [returnFrom, setReturnFrom] = useState('');
+  const [returnTo, setReturnTo] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [vacationLength, setVacationLength] = useState(1);
+  const [minNonWorkingDays, setMinNonWorkingDays] = useState(0);
+
+  const formData = {
+    departureFrom: departureFrom.code, // useState ile tanımladığın state
+    departureTo: departureTo.code,
+    returnFrom: returnFrom.code,
+    returnTo: returnTo.code,
+    startDate: startDate ? startDate.format('YYYY-MM-DD') : null,
+    endDate: endDate ? endDate.format('YYYY-MM-DD') : null,
+    vacationLength,
+    minNonWorkingDays,
+  };
 
   return (
     <>
@@ -78,13 +89,26 @@ function MainPage() {
               opacity: 0.9,
             }}
           >
-            <FlightForm />
-            <DateRangeSelector />
-            <NumberFields />
+            <FlightForm
+              setDepartureFrom={setDepartureFrom}
+              setDepartureTo={setDepartureTo}
+              setReturnFrom={setReturnFrom}
+              setReturnTo={setReturnTo}
+            />
+            <DateRangeSelector
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
+            <NumberFields
+              minNonWorkingDays={minNonWorkingDays}
+              vacationLength={vacationLength}
+              setMinNonWorkingDays={setMinNonWorkingDays}
+              setVacationLength={setVacationLength}
+            />
             <SearchButton
               onClick={() => {
                 setOpen(true);
-                console.log('Button clicked:', open);
+                dispatch(fetchFlightData(formData));
               }}
             />
           </Paper>
