@@ -16,7 +16,7 @@ import ResultPanel from '../components/ResultPanel';
 
 function MainPage() {
   const [open, setOpen] = useState(false);
-  const trips = Array.from({ length: 12 }).map((_, i) => ({
+  const trips = Array.from({ length: 240 }).map((_, i) => ({
     departureDate: '2025-09-10',
     departureTime: '10:00',
     returnDate: '2025-09-20',
@@ -95,7 +95,7 @@ function MainPage() {
           item
           xs={12}
           md={6} // desktopta yarı yarıya
-          sx={{ boxSizing: 'border-box', mt: '2' }}
+          sx={{ boxSizing: 'border-box' }}
         >
           <ResultPanel
             open={open}
