@@ -3,17 +3,13 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState } from 'react';
 
-export default function DateRangeSelector({
-  onChange,
-  setStartDate,
-  setEndDate,
-}) {
+export default function DateRangeSelector({ formState, updateFormState }) {
   const handleStartChange = (newValue) => {
-    setStartDate(newValue);
+    updateFormState('startDate', newValue);
   };
 
   const handleEndChange = (newValue) => {
-    setEndDate(newValue);
+    updateFormState('endDate', newValue);
   };
 
   return (

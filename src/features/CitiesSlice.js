@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Flights } from '../api/FlightPlannerAPI';
+import { Cities } from '../api/CitiesAPI';
 
-export const fetchFlightData = createAsyncThunk(
-  'flight/fetchFlightData',
+export const fetchCitiesData = createAsyncThunk(
+  'cities/fetchCitiesData',
   async (formData, { rejectWithValue }) => {
     try {
-      const data = await Flights(formData);
+      const data = await Cities(formData);
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -13,8 +13,8 @@ export const fetchFlightData = createAsyncThunk(
   }
 );
 
-const FlightSlice = createSlice({
-  name: 'flights',
+const CitiesSlice = createSlice({
+  name: 'cities',
   initialState: {
     result: null,
     status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -23,20 +23,20 @@ const FlightSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFlightData.pending, (state) => {
+      .addCase(fetchCitiesData.pending, (state) => {
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(fetchFlightData.fulfilled, (state, action) => {
+      .addCase(fetchCitiesData.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.result = action.payload;
         console.log(action.payload);
       })
-      .addCase(fetchFlightData.rejected, (state, action) => {
+      .addCase(fetchCitiesData.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       });
   },
 });
 
-export default FlightSlice.reducer;
+export default CitiesSlice.reducer;

@@ -12,27 +12,35 @@ function MainPage() {
   const { result, status, error } = useSelector((state) => state.flight);
   const [open, setOpen] = useState(false);
   const trips = result?.flightData?.trips || [];
-  console.log('result:', result);
-  console.log('trips:', trips);
-
-  const [departureFrom, setDepartureFrom] = useState('');
-  const [departureTo, setDepartureTo] = useState('');
-  const [returnFrom, setReturnFrom] = useState('');
-  const [returnTo, setReturnTo] = useState('');
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [vacationLength, setVacationLength] = useState(1);
-  const [minNonWorkingDays, setMinNonWorkingDays] = useState(0);
-
+  const [formState, setFormState] = useState({
+    departureFrom: null,
+    departureTo: null,
+    returnFrom: null,
+    returnTo: null,
+    startDate: null,
+    endDate: null,
+    vacationLength: 1,
+    minNonWorkingDays: 0,
+  });
+  const isFormValid =
+    formState.departureFrom?.code &&
+    formState.departureTo?.code &&
+    formState.returnFrom?.code &&
+    formState.returnTo?.code &&
+    formState.startDate &&
+    formState.endDate;
+  const updateFormState = (key, value) => {
+    setFormState((prev) => ({ ...prev, [key]: value }));
+  };
   const formData = {
-    departureFrom: departureFrom.code, // useState ile tanımladığın state
-    departureTo: departureTo.code,
-    returnFrom: returnFrom.code,
-    returnTo: returnTo.code,
-    startDate: startDate ? startDate.format('YYYY-MM-DD') : null,
-    endDate: endDate ? endDate.format('YYYY-MM-DD') : null,
-    vacationLength,
-    minNonWorkingDays,
+    departureFrom: formState.departureFrom?.code || null,
+    departureTo: formState.departureTo?.code || null,
+    returnFrom: formState.returnFrom?.code || null,
+    returnTo: formState.returnTo?.code || null,
+    startDate: formState.startDate?.format('YYYY-MM-DD') || null,
+    endDate: formState.endDate?.format('YYYY-MM-DD') || null,
+    vacationLength: formState.vacationLength,
+    minNonWorkingDays: formState.minNonWorkingDays,
   };
 
   return (
@@ -90,22 +98,19 @@ function MainPage() {
             }}
           >
             <FlightForm
-              setDepartureFrom={setDepartureFrom}
-              setDepartureTo={setDepartureTo}
-              setReturnFrom={setReturnFrom}
-              setReturnTo={setReturnTo}
+              formState={formState}
+              updateFormState={updateFormState}
             />
             <DateRangeSelector
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
+              formState={formState}
+              updateFormState={updateFormState}
             />
             <NumberFields
-              minNonWorkingDays={minNonWorkingDays}
-              vacationLength={vacationLength}
-              setMinNonWorkingDays={setMinNonWorkingDays}
-              setVacationLength={setVacationLength}
+              formState={formState}
+              updateFormState={updateFormState}
             />
             <SearchButton
+              disabled={!isFormValid}
               onClick={() => {
                 setOpen(true);
                 dispatch(fetchFlightData(formData));
@@ -115,12 +120,7 @@ function MainPage() {
         </Grid>
 
         {/* Sağ Box */}
-        <Grid
-          item
-          xs={12}
-          md={6} // desktopta yarı yarıya
-          sx={{ boxSizing: 'border-box' }}
-        >
+        <Grid item xs={12} md={6} sx={{ boxSizing: 'border-box' }}>
           <ResultPanel
             open={open}
             trips={trips}

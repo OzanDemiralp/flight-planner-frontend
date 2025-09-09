@@ -2,12 +2,7 @@ import { Grid, TextField, Autocomplete } from '@mui/material';
 import { LuPlaneTakeoff } from 'react-icons/lu';
 import { LuPlaneLanding } from 'react-icons/lu';
 
-function FlightForm({
-  setDepartureFrom,
-  setDepartureTo,
-  setReturnFrom,
-  setReturnTo,
-}) {
+function FlightForm({ formState, updateFormState }) {
   // Şimdilik dummy şehir listesi
   const cities = [
     { code: 'IST', label: 'Istanbul' },
@@ -33,11 +28,16 @@ function FlightForm({
     >
       <Grid item xs={12} sm={6} lg={3} sx={{ flex: '1 1 200px' }}>
         <Autocomplete
+          value={formState.departureFrom || null}
           options={cities}
-          onChange={(e, newValue) => setDepartureFrom(newValue)}
+          onChange={(e, newValue) => updateFormState('departureFrom', newValue)}
           getOptionLabel={(option) => option.label}
           renderInput={(params) => (
-            <TextField {...params} label='Departure From' />
+            <TextField
+              {...params}
+              label='Departure From'
+              sx={{ width: '100%' }}
+            />
           )}
         />
       </Grid>
@@ -57,8 +57,9 @@ function FlightForm({
 
       <Grid item xs={12} sm={6} lg={3} sx={{ flex: '1 1 200px' }}>
         <Autocomplete
+          value={formState.departureTo || null}
           options={cities}
-          onChange={(e, newValue) => setDepartureTo(newValue)}
+          onChange={(e, newValue) => updateFormState('departureTo', newValue)}
           getOptionLabel={(option) => option.label}
           renderInput={(params) => (
             <TextField {...params} label='Departure To' />
@@ -68,8 +69,9 @@ function FlightForm({
 
       <Grid item xs={12} sm={6} lg={3} sx={{ flex: '1 1 200px' }}>
         <Autocomplete
+          value={formState.returnFrom || null}
           options={cities}
-          onChange={(e, newValue) => setReturnFrom(newValue)}
+          onChange={(e, newValue) => updateFormState('returnFrom', newValue)}
           getOptionLabel={(option) => option.label}
           renderInput={(params) => (
             <TextField {...params} label='Return From' />
@@ -92,8 +94,9 @@ function FlightForm({
 
       <Grid item xs={12} sm={6} lg={3} sx={{ flex: '1 1 200px' }}>
         <Autocomplete
+          value={formState.returnTo || null}
           options={cities}
-          onChange={(e, newValue) => setReturnTo(newValue)}
+          onChange={(e, newValue) => updateFormState('returnTo', newValue)}
           getOptionLabel={(option) => option.label}
           renderInput={(params) => <TextField {...params} label='Return To' />}
         />

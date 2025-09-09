@@ -3,7 +3,7 @@ import { PiAirplaneTiltBold } from 'react-icons/pi';
 import { useState } from 'react';
 import FlightCard from './FlightCard';
 
-function SearchButton({ onClick }) {
+function SearchButton({ onClick, disabled }) {
   return (
     <Box
       sx={{
@@ -13,6 +13,7 @@ function SearchButton({ onClick }) {
       }}
     >
       <Button
+        disabled={disabled}
         onClick={onClick} // burada dışarıdan gelen fonksiyonu kullan
         sx={{
           bgcolor: '#2196f3',

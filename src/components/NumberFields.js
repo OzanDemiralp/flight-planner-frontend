@@ -1,11 +1,6 @@
 import { TextField, Grid } from '@mui/material';
 
-function NumberFields({
-  setMinNonWorkingDays,
-  setVacationLength,
-  minNonWorkingDays,
-  vacationLength,
-}) {
+function NumberFields({ formState, updateFormState }) {
   return (
     <Grid container spacing={1} mt={1.5} justifyContent='center'>
       <Grid item xs={12} sm={6} md={4}>
@@ -13,8 +8,10 @@ function NumberFields({
           label='Minimum Non-Work Days'
           type='number'
           fullWidth
-          value={minNonWorkingDays}
-          onChange={(e) => setMinNonWorkingDays(Number(e.target.value))}
+          value={formState.minNonWorkingDays}
+          onChange={(e) =>
+            updateFormState('minNonWorkingDays', Number(e.target.value))
+          }
         />
       </Grid>
       <Grid item xs={12} sm={6} md={4}>
@@ -22,8 +19,10 @@ function NumberFields({
           label='Vacation Length'
           type='number'
           fullWidth
-          value={vacationLength}
-          onChange={(e) => setVacationLength(Number(e.target.value))}
+          value={formState.vacationLength}
+          onChange={(e) =>
+            updateFormState('vacationLength', Number(e.target.value))
+          }
         />
       </Grid>
     </Grid>
