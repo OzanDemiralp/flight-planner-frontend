@@ -16,8 +16,8 @@ export const fetchCitiesData = createAsyncThunk(
 const CitiesSlice = createSlice({
   name: 'cities',
   initialState: {
-    result: null,
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    list: [], // burası artık list olacak
+    status: 'idle',
     error: null,
   },
   reducers: {},
@@ -29,8 +29,8 @@ const CitiesSlice = createSlice({
       })
       .addCase(fetchCitiesData.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.result = action.payload;
-        console.log(action.payload);
+        state.list = action.payload.citiesData; // citiesData array’i list’e ata
+        console.log(action.payload.citiesData);
       })
       .addCase(fetchCitiesData.rejected, (state, action) => {
         state.status = 'failed';

@@ -6,7 +6,7 @@ import DateRangeSelector from '../components/DateRangeSelector';
 import SearchButton from '../components/SearchButton';
 import ResultPanel from '../components/ResultPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFlightData } from '../features/flightSlice';
+import { fetchFlightData } from '../features/FlightSlice';
 function MainPage() {
   const dispatch = useDispatch();
   const { result, status, error } = useSelector((state) => state.flight);
