@@ -35,6 +35,7 @@ export default function DateRangeSelector({ formState, updateFormState }) {
               label='End Date'
               onChange={handleEndChange}
               renderInput={(params) => <TextField {...params} fullWidth />}
+              minDate={formState.startDate} // dönüş tarihi gidişten küçük olamaz
             />
           </Grid>
         </Grid>
