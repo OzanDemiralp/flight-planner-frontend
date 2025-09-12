@@ -57,16 +57,16 @@ function NumberFields({ formState, updateFormState }) {
     <Grid container spacing={1} mt={1.5} justifyContent='center'>
       <Grid item xs={12} sm={6} md={4}>
         {renderNumberField(
-          'Minimum Non-Work Days',
-          formState.minNonWorkingDays,
-          'minNonWorkingDays'
+          'Vacation Length',
+          formState.vacationLength,
+          'vacationLength'
         )}
       </Grid>
       <Grid item xs={12} sm={6} md={4}>
         {renderNumberField(
-          'Vacation Length',
-          formState.vacationLength,
-          'vacationLength'
+          'Minimum Non-Work Days',
+          formState.minNonWorkingDays,
+          'minNonWorkingDays'
         )}
       </Grid>
     </Grid>
