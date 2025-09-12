@@ -28,7 +28,9 @@ function MainPage() {
     formState.returnFrom?.code &&
     formState.returnTo?.code &&
     formState.startDate &&
-    formState.endDate;
+    formState.endDate &&
+    formState.vacationLength &&
+    formState.minNonWorkingDays;
   const updateFormState = (key, value) => {
     setFormState((prev) => ({ ...prev, [key]: value }));
   };
@@ -122,8 +124,10 @@ function MainPage() {
         {/* Sağ Box */}
         <Grid item xs={12} md={6} sx={{ boxSizing: 'border-box' }}>
           <ResultPanel
-            open={open}
+            open={open || status === 'isLoading'}
             trips={trips}
+            isLoading={status === 'loading'}
+            error={error}
             onClose={() => setOpen(false)}
           />
         </Grid>

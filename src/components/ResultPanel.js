@@ -6,19 +6,23 @@ import {
   Fade,
   Stack,
   Pagination,
+  Skeleton,
+  CircularProgress,
 } from '@mui/material';
 import { useState } from 'react';
 
 const PAGE_SIZE = 7;
 
-function ResultPanel({ open, trips, onClose }) {
+function ResultPanel({ open, trips, isLoading, error, hasSearched, onClose }) {
   const [page, setPage] = useState(1);
   const pageCount = Math.ceil(trips.length / PAGE_SIZE);
   const handleChange = (_e, value) => {
     setPage(value);
   };
   const start = (page - 1) * PAGE_SIZE;
-  const pagedTrips = trips.slice(start, start + PAGE_SIZE);
+  const pagedTrips = Array.isArray(trips)
+    ? trips.slice(start, start + PAGE_SIZE)
+    : [];
 
   return (
     <Fade in={open} timeout={500}>
@@ -36,52 +40,80 @@ function ResultPanel({ open, trips, onClose }) {
           Flights Found
         </Typography>
 
-        <Stack spacing={0.5}>
-          {pagedTrips.map((trip, i) => (
-            <Paper
-              key={i}
-              elevation={1}
+        {/* Loading state */}
+        {isLoading && (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress color='primary' />
+          </Box>
+        )}
+        {/* Error state */}
+        {!isLoading && error && (
+          <Typography color='error' fontWeight='500'>
+            {error}
+          </Typography>
+        )}
+        {/* No results */}
+        {!isLoading && !error && trips.length === 0 && (
+          <Typography color='text.secondary'>No trips found.</Typography>
+        )}
+        {/* Results */}
+        {!isLoading && !error && trips.length > 0 && (
+          <>
+            <Stack spacing={0.5}>
+              {pagedTrips.map((trip, i) => (
+                <Paper
+                  key={i}
+                  elevation={1}
+                  sx={{
+                    p: 1.5,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderRadius: 3,
+                    border: '1px solid rgba(0,0,0,0.08)',
+                    bgcolor: 'background.paper',
+                    '&:hover': {
+                      boxShadow: 4,
+                      transform: 'scale(1.02)',
+                      transition: '0.2s',
+                    },
+                  }}
+                >
+                  <Box>
+                    <Typography variant='body1' fontWeight='500'>
+                      Departure: {trip.departureDate} &nbsp;{' '}
+                      {trip.departureTime}
+                    </Typography>
+                    <Typography variant='body1' fontWeight='500'>
+                      Return: {trip.returnDate} &nbsp; {trip.returnTime}
+                    </Typography>
+                  </Box>
+                  <Typography variant='body1' fontWeight='600' color='primary'>
+                    {trip.totalPrice} $
+                  </Typography>
+                </Paper>
+              ))}
+            </Stack>
+            <Pagination
+              count={pageCount}
+              page={page}
+              onChange={handleChange}
+              size='small'
               sx={{
-                p: 1.5,
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: 3,
-                border: '1px solid rgba(0,0,0,0.08)',
-                bgcolor: 'background.paper',
-                '&:hover': {
-                  boxShadow: 4,
-                  transform: 'scale(1.02)',
-                  transition: '0.2s',
-                },
+                padding: 2,
               }}
-            >
-              <Box>
-                <Typography variant='body1' fontWeight='500'>
-                  Departure: {trip.departureDate} &nbsp; {trip.departureTime}
-                </Typography>
-                <Typography variant='body1' fontWeight='500'>
-                  Return: {trip.returnDate} &nbsp; {trip.returnTime}
-                </Typography>
-              </Box>
-              <Typography variant='body1' fontWeight='600' color='primary'>
-                {trip.totalPrice} $
-              </Typography>
-            </Paper>
-          ))}
-        </Stack>
-        <Pagination
-          count={pageCount}
-          page={page}
-          onChange={handleChange}
-          size='small'
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 2,
-          }}
-        />
+            />
+          </>
+        )}
         <Button
           onClick={onClose}
           fullWidth
@@ -91,6 +123,7 @@ function ResultPanel({ open, trips, onClose }) {
             fontWeight: 'bold',
             '&:hover': { bgcolor: '#1976d2' },
             transition: '0.2s',
+            mt: 1,
           }}
         >
           Close

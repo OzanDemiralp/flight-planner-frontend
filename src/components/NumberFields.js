@@ -9,14 +9,27 @@ function NumberFields({ formState, updateFormState }) {
   });
   const handleChange = (field, value) => {
     let newErrors = { ...errors };
-    if (field === 'minNonWorkingDays' && value < 0) {
+    const vacLength =
+      field === 'vacationLength'
+        ? Number(value)
+        : Number(formState.vacationLength);
+    const minNonWorkLength =
+      field === 'minNonWorkingDays'
+        ? Number(value)
+        : Number(formState.minNonWorkingDays);
+    if (field === 'minNonWorkingDays' && value < 0 && value != '') {
       newErrors[field] = 'Minimum Non-Work Days cannot be less than 0!';
-    } else if (field === 'vacationLength' && value < 1) {
+    } else if (field === 'vacationLength' && value < 1 && value != '') {
       newErrors[field] = 'Vacation Length cannot be less than 1!';
+    } else if (minNonWorkLength > vacLength) {
+      // Mantıksal hata
+      newErrors['minNonWorkingDays'] =
+        'Minimum Non-Work Days cannot be greater than Vacation Length!';
     } else {
+      // Hata yoksa temizle
       newErrors[field] = '';
+      if (field === 'vacationLength') newErrors['minNonWorkingDays'] = '';
     }
-
     setErrors(newErrors);
     if (!newErrors[field]) {
       updateFormState(field, value);
