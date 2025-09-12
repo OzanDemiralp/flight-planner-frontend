@@ -1,7 +1,6 @@
 import { Box, Grid, TextField } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useState } from 'react';
 
 export default function DateRangeSelector({ formState, updateFormState }) {
   const handleStartChange = (newValue) => {
@@ -35,7 +34,9 @@ export default function DateRangeSelector({ formState, updateFormState }) {
               label='End Date'
               onChange={handleEndChange}
               renderInput={(params) => <TextField {...params} fullWidth />}
-              minDate={formState.startDate} // dönüş tarihi gidişten küçük olamaz
+              minDate={
+                formState.startDate
+              } /* dönüş tarihi gidişten önce olamaz */
             />
           </Grid>
         </Grid>
