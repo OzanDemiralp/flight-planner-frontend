@@ -69,10 +69,11 @@ function MainPage() {
         sx={{
           minHeight: 'calc(100vh - 64px)',
           px: 2,
-          mt: { xs: 2, sm: 3, md: 6, lg: 8 },
+          mt: 7,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          overflowY: { xs: 'auto', sm: 'auto', md: 'visible' },
         }}
       >
         {/* Sol Paper */}

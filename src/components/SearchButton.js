@@ -1,7 +1,5 @@
 import { Box, Button } from '@mui/material';
 import { PiAirplaneTiltBold } from 'react-icons/pi';
-import { useState } from 'react';
-import FlightCard from './FlightCard';
 
 function SearchButton({ onClick, disabled }) {
   return (
